@@ -2160,6 +2160,9 @@ namespace IEC61850
         /// </summary>
         public class IedServer : IDisposable
         {
+            [DllImport ("iec61850", CallingConvention-CallingConvention.Cdecl)]
+            static extern IntPtr IedServer_getMmsServer(IntPtr self);
+
             [DllImport ("iec61850", CallingConvention=CallingConvention.Cdecl)]
             static extern IntPtr IedServer_createWithConfig(IntPtr modelRef, IntPtr tlsConfiguration, IntPtr serverConfiguratio);
 
