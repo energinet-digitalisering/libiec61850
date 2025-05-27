@@ -41,7 +41,7 @@ namespace IEC61850
             static extern IntPtr ConfigFileParser_createModelFromConfigFileEx(string filename);
 
             public static IedModel CreateModelFromConfigFile(string filePath)
-            { 
+            {
                 IntPtr retVal = ConfigFileParser_createModelFromConfigFileEx (filePath);
                 if (retVal == IntPtr.Zero) {
                     return null;
@@ -98,7 +98,7 @@ namespace IEC61850
 
             ~IedModel()
             {
-                Dispose();    
+                Dispose();
             }
 
             /// <summary>
@@ -386,8 +386,8 @@ namespace IEC61850
             INT8 = 1,
             INT16 = 2,
             INT32 = 3,
-            INT64 = 4, 
-            INT128 = 5, 
+            INT64 = 4,
+            INT128 = 5,
             INT8U = 6,
             INT16U = 7,
             INT24U = 8,
@@ -435,7 +435,7 @@ namespace IEC61850
         /// The CDC class contains helper functions to create DataObject instances for the
         /// most common Common Data Classes.
         /// </summary>
-        public class CDC 
+        public class CDC
         {
             [DllImport("iec61850", CallingConvention = CallingConvention.Cdecl)]
             static extern IntPtr CDC_SPS_create(string name, IntPtr parent, uint options);
@@ -514,7 +514,7 @@ namespace IEC61850
 
             [DllImport("iec61850", CallingConvention = CallingConvention.Cdecl)]
             static extern IntPtr CDC_APC_create(string name, IntPtr parent, uint options, uint controlOptions, [MarshalAs(UnmanagedType.I1)] bool isIntegerNotFloat);
-            
+
             [DllImport("iec61850", CallingConvention = CallingConvention.Cdecl)]
             static extern IntPtr CDC_BCR_create(string name, IntPtr parent, uint options);
 
@@ -566,7 +566,7 @@ namespace IEC61850
                 else
                     return null;
             }
-            
+
             public static DataObject Create_CDC_DPS(ModelNode parent, string name, uint options)
             {
                 IntPtr self = CDC_DPS_create(name, parent.self, options);
@@ -1686,7 +1686,7 @@ namespace IEC61850
             }
         }
 
-        public class ClientConnection 
+        public class ClientConnection
         {
             [DllImport("iec61850", CallingConvention = CallingConvention.Cdecl)]
             static extern IntPtr ClientConnection_getPeerAddress(IntPtr self);
@@ -2071,7 +2071,7 @@ namespace IEC61850
 
         public delegate void RCBEventHandler(object parameter, ReportControlBlock rcb, ClientConnection con, RCBEventType eventType, string parameterName, MmsDataAccessError serviceError);
 
-        public delegate MmsDataAccessError WriteAccessHandler (DataAttribute dataAttr, MmsValue value, 
+        public delegate MmsDataAccessError WriteAccessHandler (DataAttribute dataAttr, MmsValue value,
             ClientConnection connection, object parameter);
 
         /// <summary>
@@ -2147,7 +2147,7 @@ namespace IEC61850
             /// </summary>
             OBJECT_ACCESS_DENIED = 3,
             /// <summary>
-            /// object not visible in this security context ??? 
+            /// object not visible in this security context ???
             /// </summary>
             OBJECT_UNDEFINED = 4
         }
@@ -2370,11 +2370,11 @@ namespace IEC61850
 
                 ControlHandlerInfo info = (ControlHandlerInfo)handle.Target;
 
-                if (info != null && info.checkHandler != null) 
+                if (info != null && info.checkHandler != null)
                 {
                     ControlAction controlAction = new ControlAction (action, info, this);
 
-                    return (int)info.checkHandler (controlAction, info.checkHandlerParameter, new MmsValue (ctlVal), test, interlockCheck); 
+                    return (int)info.checkHandler (controlAction, info.checkHandlerParameter, new MmsValue (ctlVal), test, interlockCheck);
                 } else
                     return (int)CheckHandlerResult.OBJECT_UNDEFINED;
             }
@@ -2390,7 +2390,7 @@ namespace IEC61850
                     ControlAction controlAction = new ControlAction (action, info, this);
 
                     return (int)info.waitForExecHandler (controlAction, info.waitForExecHandlerParameter, new MmsValue (ctlVal), test, synchoCheck);
-                } 
+                }
                 else
                     return (int)ControlHandlerResult.FAILED;
             }
@@ -2415,7 +2415,7 @@ namespace IEC61850
                 public object parameter;
                 public DataAttribute dataAttribute;
 
-                public WriteAccessHandlerInfo (WriteAccessHandler h, object p, DataAttribute da, InternalWriteAccessHandler internalHandler) 
+                public WriteAccessHandlerInfo (WriteAccessHandler h, object p, DataAttribute da, InternalWriteAccessHandler internalHandler)
                 {
                     handler = h;
                     parameter = p;
@@ -2454,7 +2454,7 @@ namespace IEC61850
                     clientConnections.TryGetValue (clientConnection, out con);
 
                     if (con != null) {
-                        
+
                         if (connectionHandler != null)
                             connectionHandler (this, con, false, connectionHandlerParameter);
 
@@ -2534,7 +2534,7 @@ namespace IEC61850
             public void Start(int tcpPort)
             {
                 if (internalConnectionHandler == null)
-                    internalConnectionHandler = new InternalConnectionHandler (ConnectionIndicationHandlerImpl);                    
+                    internalConnectionHandler = new InternalConnectionHandler (ConnectionIndicationHandlerImpl);
 
                 IedServer_setConnectionIndicationHandler (self, internalConnectionHandler, IntPtr.Zero);
 
@@ -2713,7 +2713,7 @@ namespace IEC61850
             public void HandleWriteAccess (DataAttribute dataAttr, WriteAccessHandler handler, object parameter)
             {
                 InternalWriteAccessHandler internalHandler = new InternalWriteAccessHandler(WriteAccessHandlerImpl);
- 
+
                 writeAccessHandlers.Add (dataAttr.self, new WriteAccessHandlerInfo(handler, parameter, dataAttr, internalHandler));
 
                 IedServer_handleWriteAccess (self, dataAttr.self, internalHandler, IntPtr.Zero);
@@ -2808,7 +2808,7 @@ namespace IEC61850
             /// </summary>
             /// This function should be called before the data model is updated.
             /// After updating the data model the function <see cref="UnlockDataModel"/> should be called.
-            /// 
+            ///
             /// <remarks>
             /// his method should never be called inside of a library callback function. In the context of
             /// a library callback the data model is always already locked! Calling this function inside of a
@@ -2822,7 +2822,7 @@ namespace IEC61850
             /// <summary>
             /// Unlocks the data model and process pending client requests.
             /// </summary>
-            /// 
+            ///
             /// <remarks>
             /// This method should never be called inside of a library callback function. In the context of
             /// a library callback the data model is always already locked!
@@ -2934,11 +2934,11 @@ namespace IEC61850
             /// <summary>
             /// Set the Ethernet interface to be used by GOOSE publishing
             /// </summary>
-            /// 
+            ///
             /// This function can be used to set the GOOSE interface ID. If not used or set to null the
             /// default interface ID from stack_config.h is used.Note the interface ID is operating system
             /// specific!
-            /// 
+            ///
             /// <param name="interfaceId">the ID of the ethernet interface to be used for GOOSE publishing</param>
             public void SetGooseInterfaceId(string interfaceId)
             {
@@ -2948,10 +2948,10 @@ namespace IEC61850
             /// <summary>
             /// Set the Ethernet interface to be used by GOOSE publishing
             /// </summary>
-            /// 
+            ///
             /// This function can be used to set the GOOSE interface ID for all GCBs (parameter ln = null) or for
             /// a specific GCB specified by the logical node instance and the GCB name.
-            /// 
+            ///
             /// <param name="ln">ln the logical node that contains the GCB or null to set the ethernet interface ID for all GCBs</param>
             /// <param name="gcbName">the name (not object reference!) of the GCB</param>
             /// <param name="interfaceId">the ID of the ethernet interface to be used for GOOSE publishing</param>
@@ -2966,10 +2966,10 @@ namespace IEC61850
             /// <summary>
             /// Enable/disable the use of VLAN tags in GOOSE messages
             /// </summary>
-            /// 
+            ///
             /// This function can be used to enable/disable VLAN tagging for all GCBs (parameter ln = null) or for
             /// a specific GCB specified by the logical node instance and the GCB name.
-            /// 
+            ///
             /// <param name="ln">the logical node that contains the GCB or null to enable/disable VLAN tagging for all GCBs</param>
             /// <param name="gcbName">the name (not object reference!) of the GCB</param>
             /// <param name="useVlanTag">true to enable VLAN tagging, false otherwise</param>
@@ -3005,7 +3005,7 @@ namespace IEC61850
             {
                 goCbEventHandler = handler;
                 goCbEventHandlerParameter = parameter;
-   
+
                 if (internalGoCBEventHandler == null)
                 {
                     internalGoCBEventHandler = new InternalGoCBEventHandler(InternalGoCBEventHandlerImplementation);
