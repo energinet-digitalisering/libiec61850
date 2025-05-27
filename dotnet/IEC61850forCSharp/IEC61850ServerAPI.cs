@@ -2167,7 +2167,7 @@ namespace IEC61850
             {
                 IntPtr mmsServerPtr = IedServer_getMmsServer (self);
 
-                if (mmsServerPts != IntPtr.Zero)
+                if (mmsServerPtr != IntPtr.Zero)
                     return new MmsServer (mmsServerPtr);
                 else
                     return null;
