@@ -2163,7 +2163,7 @@ namespace IEC61850
             [DllImport ("iec61850", CallingConvention = CallingConvention.Cdecl)]
             static extern IntPtr IedServer_getMmsServer(IntPtr self);
 
-            public MmsValue GetMmsServer()
+            public MmsServer GetMmsServer()
             {
                 IntPtr mmsServerPtr = IedServer_getMmsServer (self);
 
