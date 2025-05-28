@@ -40,10 +40,10 @@ namespace IEC61850
             // Which means I need to add an MmsError type, since it seems to not exist in dotnet land
             // Maybe I can take inspiration from MmsDataAccessError (CommonAPI)
 
-			private delegate int InternalFileAccessHandler(IntPtr parameter, IntPtr mmsServerConnection, IntPtr mmsService, string localFileName, string otherFilename);
+			private delegate int InternalFileAccessHandler(IntPtr parameter, IntPtr mmsServerConnection, int mmsService, string localFileName, string otherFilename);
 
             // TODO: I really have no idea what the arguments or return type here should be
-            public delegate int FileAccessHandler(string localFilename, string otherFilename);
+            public delegate int FileAccessHandler(int mmsService, string localFilename, string otherFilename);
 
             // Look for IedServer_setConnectionIndicationHandler
             [DllImport("iec61850", CallingConvention = CallingConvention.Cdecl)]
@@ -51,13 +51,13 @@ namespace IEC61850
 
             // TODO: The mmsService is actually an enum of MmsFileServiceType (mms_server.h) - it should be defined and passed to the callback (userProvidedFileAccessHandler)
 
-            private int FileAccessHandlerImpl(IntPtr parameter, IntPtr mmsServerConnection, IntPtr mmsService, string localFilename, string otherFilename)
+            private int FileAccessHandlerImpl(IntPtr parameter, IntPtr mmsServerConnection, int mmsService, string localFilename, string otherFilename)
             {
                 if (userProvidedFileAccessHandler != null)
-                    return userProvidedFileAccessHandler(localFilename, otherFilename);
+                    return userProvidedFileAccessHandler(mmsService, localFilename, otherFilename);
 
-                // TODO: Does this really make sense?
-                return 0;
+                // MMS_ERROR_OTHER
+                return 9;
             }
 
             public void InstallFileAccessHandler(FileAccessHandler handler)
