@@ -2173,6 +2173,15 @@ namespace IEC61850
                     return null;
             }
 
+            [DllImport ("iec61850", CallingConvention = CallingConvention.Cdecl)]
+            static extern void IedServer_setFilestoreBasepath(IntPtr self, string basepath);
+
+            public void SetFilestoreBasepath(string basepath)
+            {
+                IedServer_setFilestoreBasepath(self, basepath);
+
+            }
+
             [DllImport ("iec61850", CallingConvention=CallingConvention.Cdecl)]
             static extern IntPtr IedServer_createWithConfig(IntPtr modelRef, IntPtr tlsConfiguration, IntPtr serverConfiguratio);
 
